@@ -2,23 +2,53 @@
     spl_autoload_register(function ($class) {
         include_once __DIR__ . '\/basis/' . $class . '.php';
     });
-    $products = new Products();
+    $products = new Products();  
     $products = $products->get();
-    $blue = $products['cosmo'];
-    $red = $products['speeder'];
-    $green = $cosmo = $products['karkani'];
-    $yellow = $products['lunar'];
-    $style1 = 'style = "background-image: url(' . $blue['photo'] . ')"';
-    $style2 = 'style = "background-image: url(' . $red['photo'] . ')"';
-    $style3 = 'style = "background-image: url(' . $green['photo'] . ')"';
-    $style4 = 'style = "background-image: url(' . $yellow['photo'] . ')"';
+    $productsDiv = '';
+    $count = 1;
+    foreach($products as $product => $value) {
+       if($count != 2) {
+          $productsDiv = $productsDiv . ' <div class="grid-item-img'. $count .'" style = "background-image: url(' . $value['photo'] . ')"></div>
+          <div class="grid-item">
+              <p class="p1"><a href="card.html" class="unselectable">'. $value['name'] . '</a></p>
+              <p class="p2">3'. $value['price'] . '</p>
+              <p class="p3">'. $value['status'] . '</p>
+              <p class="p3">'. $value['amount'] . '</p>
+              <a href="card.html"><button type="submit" value="BUY" disabled>BUY</button></a>
+          </div>
+          ';
+       }
+       else {
+         $productsDiv = $productsDiv . ' 
+         <div class="grid-item-img'. $count .'" style = "background-image: url(' . $value['photo'] . ')"></div>
+         <div class="grid-item">
+             <p class="p1"><a href="card.html" class="unselectable">'. $value['name'] . '</a></p>
+             <p class="p2">3'. $value['price'] . '</p>
+             <p class="p3">'. $value['status'] . '</p>
+             <p class="p3">'. $value['amount'] . '</p>
+             <a href="card.html"><button type="submit" value="BUY" disabled>BUY</button></a>
+         </div>
+         <div class="grid-item-center"></div>  
+            <div class="grid-item-center"></div>
+            <div class="grid-item-center"></div>
+            <div class="grid-item-center"></div>
+            <div class="grid-item-center"></div>
+            <div class="content size">
+            <div class="text">Price</div>
+                <br />
+                <input type="range" name="size" id="size" />
+            </div>
+         ';
+       }
+       $count++;
+    }
     $content = '
-        <div class="nav">
-          <nav>
-              <span id="span"><a href="#">Home</a> /</span>
-              <span><a href="#">Catalog</a></span>
-          </nav>
-        </div>
+         <div class="nav">
+            <nav>
+               <span id="span"><a href="#">Home</a> /</span>
+               <span><a href="#">Catalog</a></span>
+            </nav>
+         </div>
         <div class="nav-chbx">
             <div class="nav-name">
                 <h1>Catalog</h1>
@@ -47,53 +77,10 @@
                 <input type="checkbox" name="name5" id="10-15" value="10000000$ - 15000000$">
                 <label for="10-15" name="name5">10000000$ - 15000000$</label><br>
             </div>
-            <div class="grid-item-img1" ' . $style1 . '></div>
-            <div class="grid-item">
-                <p class="p1"><a href="card.html" class="unselectable">'. $blue['name'] . '</a></p>
-                <p class="p2">3'. $blue['price'] . '</p>
-                <p class="p3">'. $blue['status'] . '</p>
-                <p class="p3">'. $blue['amount'] . '</p>
-                <a href="card.html"><button type="submit" value="BUY" disabled>BUY</button></a>
-            </div>  
-            <div class="grid-item-img2" ' . $style2 . '></div>
-            <div class="grid-item">
-                <p class="p1"><a href="card.html">'. $red['name'] . '</a></p>
-                <p class="p2">'. $red['price'] . '</p>
-                <p class="p4">'. $red['status'] . '</p>
-                <p class="p3">'. $red['amount'] . '</p>
-                <a href="card.html"><button type="submit" value="BUY">BUY</button></a>
-            </div>
-            <div class="grid-item-center"></div>  
-            <div class="grid-item-center"></div>
-            <div class="grid-item-center"></div>
-            <div class="grid-item-center"></div>
-            <div class="grid-item-center"></div>
-            <div class="content size">
-            <div class="text">Price</div>
-                <br />
-                <input type="range" name="size" id="size" />
-            </div>
-            <div class="grid-item-img3" ' . $style3 . '></div>
-
-            <div class="grid-item">
-                <p class="p1"><a href="card.html" class="unselectable">'. $green['name'] . '</a></p>
-                <p class="p2">'. $green['price'] . '</p>
-                <p class="p3">'. $green['status'] . '</p>
-                <p class="p3">'. $green['amount'] . '</p>
-                <a href="card.html"><button type="submit" value="BUY" disabled>BUY</button></a>
-            </div>
-
-            <div class="grid-item-img4" ' . $style4 . '></div>
-
-            <div class="grid-item">
-                <p class="p1"><a href="card.html" class="unselectable">'. $yellow['name'] . '</a></p>
-                <p class="p2">'. $yellow['price'] . '</p>
-                <p class="p3">'. $yellow['status'] . '</p>
-                <p class="p3">'. $yellow['amount'] . '</p>
-                <a href="card.html"><button type="submit" value="BUY" disabled>BUY</button></a>
-            </div>
+            '.$productsDiv.'
         </div>
     ';
-    $renderComponent = new ComponentRenderer(null, $content, 'basic.php');
+    $header = file_get_contents("./basis/header.php");
+    $renderComponent = new ComponentRenderer($header, $content, 'basic.php');
     print $renderComponent;
 ?>
